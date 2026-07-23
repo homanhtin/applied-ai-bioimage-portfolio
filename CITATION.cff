@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this portfolio code, please cite it as below."
+authors:
+  - family-names: "Ho"
+    given-names: "Manh Tin"
+title: "Applied AI for Bioimage Analysis Portfolio"
+version: 0.1.0
+date-released: 2026-07-23
+license: MIT

@@ -1,0 +1,17 @@
+name: applied-ai-bioimage
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - matplotlib
+  - scikit-image
+  - tifffile
+  - scipy
+  - tqdm
+  - pytest
+  - pip
+  - pip:
+      - cellpose>=4,<5

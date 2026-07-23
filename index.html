@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manh Tin Ho | Applied AI Bioimage Portfolio</title>
+<style>
+:root{--navy:#1e3f5f;--teal:#117080;--light:#eef6f7;--text:#26323b;--gold:#d9a62e}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);line-height:1.55;background:#fff}
+header{background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;padding:64px 8vw 54px}
+header h1{font-size:44px;margin:0 0 8px} header p{font-size:21px;max-width:900px;margin:0}
+nav{margin-top:22px} nav a{color:#fff;margin-right:18px;font-weight:bold;text-decoration:none}
+main{max-width:1120px;margin:auto;padding:42px 24px 70px} h2{color:var(--navy);border-bottom:3px solid var(--gold);padding-bottom:8px;margin-top:42px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}.card{background:var(--light);border-left:5px solid var(--teal);padding:20px;border-radius:10px}
+.metric{font-size:32px;font-weight:bold;color:var(--navy)} .small{font-size:14px;color:#52616c}.tag{display:inline-block;background:#e5eef4;padding:6px 10px;margin:4px;border-radius:18px;font-size:14px}
+.timeline{border-left:4px solid var(--teal);padding-left:20px}.timeline div{margin:18px 0} table{width:100%;border-collapse:collapse} th,td{padding:12px;border:1px solid #ccd7dc;text-align:left} th{background:var(--navy);color:#fff}
+.callout{background:#fff7df;border:1px solid #e7c463;padding:18px;border-radius:10px} footer{background:#1f2d38;color:#fff;padding:28px 8vw}
+.button{display:inline-block;background:var(--gold);color:#182530;padding:11px 16px;border-radius:7px;text-decoration:none;font-weight:bold;margin:6px 8px 6px 0}
+</style></head>
+<body>
+<header><h1>Manh Tin Ho</h1><p>Cell biologist translating wet-lab questions into validated, reproducible AI-assisted bioimage workflows.</p>
+<nav><a href="#case">Flagship case</a><a href="#public">Public benchmark</a><a href="#evidence">Skills evidence</a><a href="#contact">Contact</a></nav></header>
+<main>
+<section><h2>Positioning</h2><div class="grid">
+<div class="card"><strong>Wet-lab foundation</strong><p>Human and mammalian cell culture, 2D/3D disease models, CRISPR/Cas9, functional assays, microscopy.</p></div>
+<div class="card"><strong>Applied AI</strong><p>Cellpose model training, Napari integration, quantitative image analysis, Python environments and batch workflows.</p></div>
+<div class="card"><strong>Scientific validation</strong><p>Model evaluation, data quality, reproducibility, structured troubleshooting, biological interpretation.</p></div>
+</div></section>
+<section id="case"><h2>Flagship real-world case: 3D cyst quantification</h2><div class="grid">
+<div class="card"><div class="metric">~14,000</div><div>cysts per experiment</div></div>
+<div class="card"><div class="metric">1 week + 2 people</div><div>manual FIJI measurement before automation</div></div>
+<div class="card"><div class="metric">~1 hour</div><div>analysis after Cellpose/Napari workflow</div></div></div>
+<div class="timeline"><div><strong>Problem:</strong> manual 3D measurement limited throughput.</div><div><strong>Contribution:</strong> trained Cellpose models, defined validation needs, collaborated with the University of Bern Data Science Lab, and established the Python/Napari environment.</div><div><strong>Transfer:</strong> protocols and templates were reused for additional experimental models.</div></div>
+<div class="callout"><strong>Confidentiality:</strong> No unpublished images, model weights, code, drug-response data, or biological conclusions are shared publicly.</div></section>
+<section id="public"><h2>Public reproducible benchmark</h2><p>The companion notebook evaluates Cellpose-SAM on the CC0 BBBC039 dataset: 200 chemically perturbed U2OS microscopy fields with approximately 23,000 manually annotated nuclei.</p>
+<div class="grid"><div class="card">Data provenance and QC</div><div class="card">Pretrained baseline</div><div class="card">Validation parameter sweep</div><div class="card">Limited fine-tuning</div><div class="card">AP, AJI and IoU</div><div class="card">Failure-case analysis</div></div>
+<p><a class="button" href="notebooks/01_BBBC039_Cellpose_Benchmark.ipynb">View notebook</a><a class="button" href="README.md">Repository README</a></p></section>
+<section id="evidence"><h2>Skills evidence for current scientist roles</h2><table><tr><th>Requirement</th><th>Evidence</th></tr>
+<tr><td>Python and AI-enabled tools</td><td>Cellpose-SAM notebook, reusable modules, CSV/JSON outputs</td></tr><tr><td>Model training and validation</td><td>Fine-tuning, AP/AJI/IoU, held-out test logic, error analysis</td></tr><tr><td>Wet-lab relevance</td><td>Assay bottleneck framing and biological readout design</td></tr><tr><td>Data quality and reproducibility</td><td>QC, fixed seed, environment files, unit tests, GitHub Actions</td></tr><tr><td>Cross-functional work</td><td>Collaboration with the University of Bern Data Science Lab</td></tr><tr><td>Communication</td><td>Documented limitations, case study, employer-ready summary</td></tr></table></section>
+<section><h2>Technical focus</h2><div><span class="tag">Cellpose</span><span class="tag">Napari</span><span class="tag">Python</span><span class="tag">FIJI/ImageJ</span><span class="tag">Quantitative microscopy</span><span class="tag">CRISPR/Cas9</span><span class="tag">2D/3D cell models</span><span class="tag">Data quality</span><span class="tag">Reproducible workflows</span></div></section>
+<section id="contact"><h2>Contact</h2><p><strong>Manh Tin Ho</strong><br>Email: <a href="mailto:homanhtin@gmail.com">homanhtin@gmail.com</a><br>LinkedIn: <a href="https://www.linkedin.com/in/manh-tin-ho">linkedin.com/in/manh-tin-ho</a></p></section>
+</main><footer>Applied AI Bioimage Analysis Portfolio - public data, reproducible code, and responsible communication.</footer></body></html>
