@@ -26,58 +26,112 @@ The notebook uses the Broad Bioimage Benchmark Collection BBBC039 dataset:
 
 - 200 fluorescence microscopy fields from a U2OS chemical screen
 - approximately 23,000 manually annotated nuclei
-- official train, validation, and test partitions
+- official training, validation, and test partitions
 - CC0 public-domain data
 
 The project demonstrates:
 
 1. public data download and provenance
 2. image and annotation quality control
-3. Cellpose-SAM baseline segmentation
-4. validation-based parameter selection
-5. limited model fine-tuning
-6. AP, AJI, IoU, and object-count evaluation
-7. structured error analysis
-8. reproducible result export
+3. correction of disconnected same-color instance masks
+4. Cellpose-SAM baseline segmentation
+5. validation-based parameter selection
+6. limited model fine-tuning
+7. AP, AJI, IoU-threshold, and object-count evaluation
+8. structured error analysis
+9. locked held-out test evaluation
+10. reproducible result export
+
+## Final held-out test results
+
+The validation-selected model was evaluated once on all 50 images in the official BBBC039 test subset, without further model or parameter adjustment.
+
+| Metric | Final test result |
+|---|---:|
+| AP@0.50 | 0.934 |
+| AP@0.75 | 0.871 |
+| AP@0.90 | 0.641 |
+| AJI | 0.936 |
+| Mean absolute count error | 3.64 nuclei/image |
+| Mean absolute percentage count error | 3.21% |
+| Runtime on NVIDIA RTX 3060 | 48.4 seconds |
+| Runtime per image | 0.97 seconds |
+
+The test results closely matched validation performance, supporting generalization to previously unseen BBBC039 images.
+
+The official test subset contained no empty images. False-positive behavior on empty images was therefore not evaluated on the test set. The empty validation control produced zero false-positive objects.
+
+The final test results were not used for additional model or parameter selection.
+
+## Final model configuration
+
+- Base model: `cpsam_v2`
+- Fine-tuning data: 40 representative images from the official training subset
+- Training epochs: 100
+- Final inference settings:
+  - `cellprob_threshold=0.0`
+  - `flow_threshold=0.4`
+  - `min_size=15`
+
+The trained weight file is approximately 1.13 GB and is not stored directly in this Git repository. See [`docs/MODEL_CARD.md`](docs/MODEL_CARD.md) for the intended use, limitations, validation results, and reproducibility details.
 
 ## Repository structure
 
 ```text
 .
-├── notebooks/                    # Main Colab/Jupyter analysis
-├── src/bioimage_portfolio/       # Reusable Python utilities
-├── tests/                        # Unit tests for mask decoding and metrics
-├── docs/                         # Case study, ethics, and project plan
-├── assets/                       # Portfolio graphics
-├── .github/workflows/            # Continuous integration
-├── requirements.txt
-├── environment.yml
-├── CITATION.cff
-└── index.html                    # Optional GitHub Pages landing page
+|-- assets/                         # Portfolio graphics
+|-- docs/                           # Case study, ethics, model card, and project plan
+|-- notebooks/                      # Main Colab/Jupyter analysis
+|-- reports/final_test/             # Small final-test tables and run configuration
+|-- scripts/                        # Reproducible local evaluation script
+|-- src/bioimage_portfolio/         # Reusable Python utilities
+|-- tests/                          # Unit tests for mask decoding and metrics
+|-- environment.yml                 # General project environment
+|-- environment-final-test.yml      # Environment used for the final local test
+|-- requirements.txt
+|-- requirements-final-test.txt
+|-- CITATION.cff
+`-- index.html                      # Optional GitHub Pages landing page
+```
+
+Local-only folders excluded through `.gitignore`:
+
+```text
+data/       # Downloaded public dataset
+models/     # Large trained weight files
+results/    # Full predictions and local intermediate outputs
 ```
 
 ## Quick start
 
 ### Google Colab
 
-1. Upload this repository to GitHub.
-2. Open `notebooks/01_BBBC039_Cellpose_Benchmark.ipynb`.
-3. Replace `YOUR_GITHUB_USERNAME` and `YOUR_REPOSITORY` in the Colab link below after publishing:
+Open the completed notebook:
 
 ```text
-https://colab.research.google.com/github/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY/blob/main/notebooks/01_BBBC039_Cellpose_Benchmark.ipynb
+https://colab.research.google.com/github/homanhtin/applied-ai-bioimage-portfolio/blob/main/notebooks/01_BBBC039_Cellpose_Benchmark_completed.ipynb
 ```
 
-### Local environment
+The notebook downloads public data, performs quality control, evaluates the pretrained model, performs validation-based parameter selection, and documents limited fine-tuning.
+
+### Local final-test evaluation
+
+The final test was run in a separate environment to avoid mixed OpenMP runtimes.
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-pip install -e .
-pytest
+conda env create -f environment-final-test.yml
+conda activate cellpose-final-test
+python scripts/evaluate_bbbc039_final_test.py
 ```
+
+Required local files:
+
+```text
+data/BBBC039/
+models/bbbc039_cpsam_v2_pilot40_e100
+```
+
+The script reads the official `test.txt`, loads the locked model and parameters, evaluates all 50 test images, and writes results below `results/final_test/`.
 
 ## What this proves to employers and laboratories
 
@@ -85,23 +139,27 @@ pytest
 |---|---|
 | AI-enabled scientific tools | Cellpose-SAM application and fine-tuning |
 | Python and quantitative analysis | Reusable modules, notebook, CSV/JSON outputs |
-| Model validation | Train/validation/test logic, AP, AJI, IoU, error analysis |
+| Model validation | Official train/validation/test logic, AP, AJI, error analysis |
 | Wet-lab integration | Biological question and assay-bottleneck framing |
-| Data quality and reproducibility | QC tables, fixed seed, environment files, unit tests, CI |
+| Data quality and reproducibility | QC tables, corrected mask decoding, environment files, tests, CI |
 | Cross-functional collaboration | Real cyst-analysis project with a Data Science Lab |
-| Scientific communication | Public case study, documented limitations, CV-ready summary |
+| Scientific communication | Public case study, model card, limitations, and CV-ready summary |
 
 ## Responsible use and confidentiality
 
-- No unpublished microscopy images, annotations, model weights, or proprietary code are included.
-- Public data are downloaded from official Broad Institute URLs.
-- Performance claims must only be added after the notebook has been run and reviewed.
-- Model output should be treated as a measurement method requiring validation, not as biological truth.
+- No unpublished microscopy images, proprietary annotations, or proprietary code are included.
+- The public benchmark uses BBBC039 data downloaded from official Broad Institute sources.
+- The public BBBC039 annotations were created by the dataset providers, not by the repository author.
+- The fine-tuned model is validated only for the benchmark conditions represented by 2D Hoechst-stained U2OS nuclei.
+- Performance on other cell types, stains, microscopes, acquisition settings, or biological structures must be validated separately.
+- Model output should be treated as a measurement method requiring quality control, not as biological truth.
+- The final test results are locked and were not used for further tuning.
 
 ## Data and software sources
 
 - BBBC039, Broad Bioimage Benchmark Collection
-- Cellpose documentation and software
+- Cellpose / Cellpose-SAM
+- NumPy, SciPy, pandas, scikit-image, tifffile, and PyTorch
 - EMBL-EBI BioImage Archive machine-learning training materials
 
 ## Author
